@@ -25,6 +25,10 @@ namespace RentFinder.Console
         private static void TestBlackNumberManager()
         {
             var manager = new BlackNumberManager();
+            using (var sw = new FileStream("blackNumbers.txt", FileMode.Open))
+            {
+                manager.LoadFromStream(sw);
+            }
             var linkPattern = "https://www.olx.ua/nedvizhimost/arenda-kvartir/dolgosrochnaya-arenda-kvartir/dnepropetrovsk/";// "https://www.olx.ua/nedvizhimost/arenda-kvartir/dolgosrochnaya-arenda-kvartir/"; //"https://www.olx.ua/nedvizhimost/arenda-kvartir/dolgosrochnaya-arenda-kvartir/dnepropetrovsk/?search%5Bfilter_float_number_of_rooms%3Afrom%5D=2&search%5Bfilter_float_number_of_rooms%3Ato%5D=3";//"http://www.olx.ua/nedvizhimost/arenda-kvartir/dolgosrochnaya-arenda-kvartir/dnepropetrovsk/"; //"http://www.olx.ua/nedvizhimost/arenda-domov/dnepropetrovsk/";
             //System.Console.WriteLine("Pages count: {0}", GetPagesCount(linkPattern));
             var previewAdModels = GetPreviewModels(linkPattern);
@@ -35,6 +39,10 @@ namespace RentFinder.Console
                 sw.Write(manager.GetLongReport());
             }
 
+            using (var sw = new FileStream("blackNumbers.txt", FileMode.OpenOrCreate))
+            {
+                manager.SaveToStream(sw);
+            }
         }
 
         private static void ForKovalchuk()
@@ -92,13 +100,13 @@ namespace RentFinder.Console
         private static List<PreviewAdModel> GetPreviewModels(string link)
         {
             var res = new List<PreviewAdModel>();
-
+            var brContextFactory = new BrowsingContextFactory();
             var linkPage = "?page={0}";
             var regexPattern = "ID(.*).html";
 
            
             var processedIds = new List<string>();
-            var pagesCount = GetPagesCount(link);
+            var pagesCount = GetPagesCount(link, brContextFactory.GetNew());
             for (int i = 1; i <= pagesCount; i++)
             {
                 var requester = new HttpRequester();
@@ -126,7 +134,7 @@ namespace RentFinder.Console
                                 resLink.TempId = Regex.Match(offer.QuerySelector(".detailsLink").Attributes["href"].Value, regexPattern).Groups[1].Value;
                                 var priceString = offer.QuerySelector(".price").Children.First().InnerHtml;
                                 resLink.Price = double.Parse(Regex.Replace(priceString, "[А-Яа-яA-Za-z$ .]", ""));
-                                resLink.PhoneNumbers.AddRange(GetPhoneNumbers(resLink.TempId));
+                                resLink.PhoneNumbers.AddRange(GetPhoneNumbers(resLink.TempId, brContextFactory.GetNew()));
                                 res.Add(resLink);
                                 k++;
 
@@ -146,14 +154,10 @@ namespace RentFinder.Console
             return res;
         }
 
-        private static List<string> GetPhoneNumbers(string tempId)
+        private static List<string> GetPhoneNumbers(string tempId, IBrowsingContext brContext)
         {
             var result = new List<string>();
             var regexNumberPattern = "\"value\":\"(.*)\"";
-            var requester = new HttpRequester();
-            requester.Headers["User-Agent"] = Guid.NewGuid().ToString().Replace("-", "");
-            var configuration = Configuration.Default.WithDefaultLoader(requesters: new[] { requester });
-            var brContext = BrowsingContext.New(configuration);
             var numberLinkPattern = "http://www.olx.ua/ajax/misc/contact/phone/{0}/white/";
             var numberTask = brContext.OpenAsync(string.Format(numberLinkPattern, tempId));
             var docNumber = numberTask.Result;
@@ -188,15 +192,12 @@ namespace RentFinder.Console
             return Regex.Replace(input, @"^38|^8", "");
         }
 
-        private static int GetPagesCount(string link)
+        private static int GetPagesCount(string link, IBrowsingContext brContext)
         {
-            var requester = new HttpRequester();
-            requester.Headers["User-Agent"] = Guid.NewGuid().ToString().Replace("-", "");
-            var configuration = Configuration.Default.WithDefaultLoader(requesters: new[] { requester });
-            var brContext = BrowsingContext.New(configuration);
             var doc = brContext.OpenAsync(link).Result;
             var pager = doc.QuerySelector("#body-container > div:nth-child(3) > div > div.pager.rel.clr");
             var spans = pager.QuerySelectorAll(".item.fleft");
+#if RELEASE
             return spans.Select(s=> 
                 {
                     int pageNumber;
@@ -204,6 +205,9 @@ namespace RentFinder.Console
                     else return -1;
                     
                 }).Max();
+#else
+            return 1;
+#endif
         }
 
         private static List<AdModel> GetLinks()

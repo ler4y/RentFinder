@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Collections.Concurrent;
 using RentFinder.Model;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace RentFinder.Core
 {
@@ -82,11 +80,27 @@ namespace RentFinder.Core
             }
         }
 
-        public void SaveToFile(string fileName = "blackNumberData.dat")
+        public void SaveToStream(Stream stream)
         {
-            using (var sw = new StreamWriter(fileName))
+            using (var sw = new StreamWriter(stream))
             {
+                sw.Write(JsonConvert.SerializeObject(_phoneAdDictionary));
+            }
+        }
 
+        public void LoadFromStream(Stream stream)
+        {
+            try
+            {
+                        using (var sr = new StreamReader(stream))
+                        {
+                            var data = sr.ReadToEnd();
+                            _phoneAdDictionary = JsonConvert.DeserializeObject<Dictionary<string, List<uint>>>(data);
+                        }
+            }
+            catch 
+            {
+                //TODO: action on deserialisation error
             }
         }
     }
