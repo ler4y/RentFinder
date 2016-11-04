@@ -8,13 +8,8 @@ namespace RentFinder.Core
 {
     public class BlackNumberManager
     {
-        public BlackNumberManager()
-        {
-
-        }
-
         private readonly object _locker = new object();
-        private Dictionary<string, List<uint>> _phoneAdDictionary { get; set; } = new Dictionary<string, List<uint>>();
+        private Dictionary<string, List<uint>> PhoneAdDictionary { get; set; } = new Dictionary<string, List<uint>>();
 
         public void AddAd(PreviewAdModel model)
         {
@@ -22,16 +17,16 @@ namespace RentFinder.Core
             {
                 lock (_locker)
                 {
-                    if (_phoneAdDictionary.ContainsKey(number))
+                    if (PhoneAdDictionary.ContainsKey(number))
                     {
-                        if (!_phoneAdDictionary[number].Contains(model.AdId))
-                            _phoneAdDictionary[number].Add(model.AdId);
+                        if (!PhoneAdDictionary[number].Contains(model.AdId))
+                            PhoneAdDictionary[number].Add(model.AdId);
                     }
                     else
-                        _phoneAdDictionary.Add(number, new List<uint> { model.AdId });
+                        PhoneAdDictionary.Add(number, new List<uint> { model.AdId });
                 }
             }
-            
+
         }
 
         public void BulkAdd(IEnumerable<PreviewAdModel> modelList)
@@ -42,13 +37,13 @@ namespace RentFinder.Core
                 {
                     foreach (var number in ad.PhoneNumbers)
                     {
-                        if (_phoneAdDictionary.ContainsKey(number))
+                        if (PhoneAdDictionary.ContainsKey(number))
                         {
-                            if (!_phoneAdDictionary[number].Contains(ad.AdId))
-                                _phoneAdDictionary[number].Add(ad.AdId);
+                            if (!PhoneAdDictionary[number].Contains(ad.AdId))
+                                PhoneAdDictionary[number].Add(ad.AdId);
                         }
                         else
-                            _phoneAdDictionary.Add(number, new List<uint> { ad.AdId });
+                            PhoneAdDictionary.Add(number, new List<uint> { ad.AdId });
                     }
                 }
             }
@@ -58,7 +53,7 @@ namespace RentFinder.Core
         {
             lock (_locker)
             {
-                return _phoneAdDictionary.AsParallel().Where(s => s.Value.Count <= maximumAdsForNumber).Select(s => s.Key).ToList();
+                return PhoneAdDictionary.AsParallel().Where(s => s.Value.Count <= maximumAdsForNumber).Select(s => s.Key).ToList();
             }
         }
 
@@ -66,7 +61,7 @@ namespace RentFinder.Core
         {
             lock (_locker)
             {
-                return _phoneAdDictionary.OrderByDescending(s => s.Value.Count).Select(s => $"{s.Key}: {s.Value.Count}\n").Aggregate((c1, c2) => c1 + c2);
+                return PhoneAdDictionary.OrderByDescending(s => s.Value.Count).Select(s => $"{s.Key}: {s.Value.Count}\n").Aggregate((c1, c2) => c1 + c2);
             }
         }
 
@@ -74,8 +69,8 @@ namespace RentFinder.Core
         {
             lock (_locker)
             {
-                return _phoneAdDictionary.OrderByDescending(s => s.Value.Count)
-                    .Select(s => $"{s.Key}:\r\n{s.Value.Select(m=>$"\t{m}\r\n").Aggregate((c1,c2)=> c1+c2)}\r\n")
+                return PhoneAdDictionary.OrderByDescending(s => s.Value.Count)
+                    .Select(s => $"{s.Key}:\r\n{s.Value.Select(m => $"\t{m}\r\n").Aggregate((c1, c2) => c1 + c2)}\r\n")
                     .Aggregate((c1, c2) => c1 + "\r\n" + c2);
             }
         }
@@ -84,7 +79,7 @@ namespace RentFinder.Core
         {
             using (var sw = new StreamWriter(stream))
             {
-                sw.Write(JsonConvert.SerializeObject(_phoneAdDictionary));
+                sw.Write(JsonConvert.SerializeObject(PhoneAdDictionary));
             }
         }
 
@@ -92,13 +87,13 @@ namespace RentFinder.Core
         {
             try
             {
-                        using (var sr = new StreamReader(stream))
-                        {
-                            var data = sr.ReadToEnd();
-                            _phoneAdDictionary = JsonConvert.DeserializeObject<Dictionary<string, List<uint>>>(data);
-                        }
+                using (var sr = new StreamReader(stream))
+                {
+                    var data = sr.ReadToEnd();
+                    PhoneAdDictionary = JsonConvert.DeserializeObject<Dictionary<string, List<uint>>>(data);
+                }
             }
-            catch 
+            catch
             {
                 //TODO: action on deserialisation error
             }
