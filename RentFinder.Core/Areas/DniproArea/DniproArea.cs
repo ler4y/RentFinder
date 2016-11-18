@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace RentFinder.Core.Areas.DniproArea
 {
@@ -24,7 +20,7 @@ namespace RentFinder.Core.Areas.DniproArea
 
         private void InitCities()
         {
-            _cities.Add(new Dnipro());
+            _cities.Add(new Dnipro.Dnipro());
         }
     }
 }

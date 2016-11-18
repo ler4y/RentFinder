@@ -1,5 +1,4 @@
-﻿using System;
-using RentFinder.Core.Areas.DniproArea;
+﻿using RentFinder.Core.Areas.DniproArea;
 using RentFinder.Core.RealtyTypes;
 
 namespace RentFinder.Core

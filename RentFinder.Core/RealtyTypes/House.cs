@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RentFinder.Core.RealtyTypes
+﻿namespace RentFinder.Core.RealtyTypes
 {
     public class House: BaseRealtyType
     {

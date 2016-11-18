@@ -39,7 +39,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas\DniproArea\Dnipro.cs" />
+    <Compile Include="Areas\DniproArea\Dnipro\Dnipro.cs" />
     <Compile Include="Areas\DniproArea\DniproArea.cs" />
     <Compile Include="Areas\ICity.cs" />
     <Compile Include="Areas\IArea.cs" />
@@ -65,7 +65,9 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\References\Windows.Foundation.UniversalApiContract\2.0.0.0\Windows.Foundation.UniversalApiContract.winmd</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Areas\DniproArea\Dnipro\Districts\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
