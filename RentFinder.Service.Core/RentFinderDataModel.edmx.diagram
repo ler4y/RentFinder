@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ccce58a508834b60b84f2a4f879f444e" Name="Diagram1" >
+        <EntityTypeShape EntityType="RentFinderModel.ActualAd" Width="1.5" PointX="0.75" PointY="1" />
+        <EntityTypeShape EntityType="RentFinderModel.BlackNumber" Width="1.5" PointX="2.75" PointY="4" />
+        <EntityTypeShape EntityType="RentFinderModel.BlackPhoneNumberAd" Width="1.5" PointX="5" PointY="3.875" />
+        <EntityTypeShape EntityType="RentFinderModel.PhoneNumber" Width="1.5" PointX="3" PointY="1.375" />
+        <EntityTypeShape EntityType="RentFinderModel.BlackNumbersView" Width="1.5" PointX="5.75" PointY="0.75" />
+        <AssociationConnector Association="RentFinderModel.FK_PhoneNumbers_ToActualAds" />
+        <AssociationConnector Association="RentFinderModel.FK_BlackPhoneNumberAds_ToBlackPhoneNumbers" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
