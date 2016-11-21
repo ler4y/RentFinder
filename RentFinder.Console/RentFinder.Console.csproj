@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RentFinder.Console</RootNamespace>
     <AssemblyName>RentFinder.Console</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -79,6 +79,10 @@
     <ProjectReference Include="..\RentFinder.Model\RentFinder.Model.csproj">
       <Project>{a1664e45-3760-437a-898a-62422afe30e9}</Project>
       <Name>RentFinder.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RentFinder.Service.Core\RentFinder.Service.Core.csproj">
+      <Project>{c32c9bc2-94f6-40d7-86c8-b981d493646c}</Project>
+      <Name>RentFinder.Service.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

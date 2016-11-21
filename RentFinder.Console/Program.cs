@@ -11,6 +11,8 @@ using RentFinder.Core;
 using AngleSharp.Parser.Html;
 using System.Net;
 using AngleSharp.Network.Default;
+using RentFinder.Service.Core.TaskManagement;
+using RentFinder.Service.Core.TaskManagement.Commands;
 
 namespace RentFinder.Console
 {
@@ -18,8 +20,16 @@ namespace RentFinder.Console
     {
         static void Main(string[] args)
         {
-            TestBlackNumberManager();   
+            TestTaskmanager();
+           // TestBlackNumberManager();   
             System.Console.ReadLine();
+        }
+
+        private static void TestTaskmanager()
+        {
+            var tm = new TaskManager();
+            tm.AddTask(new RepeatedTask(new Action(()=>System.Console.WriteLine(DateTime.Now)), new TimeSpan(0,0,0,5)));
+            tm.Start();
         }
 
         private static void TestBlackNumberManager()

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace RentFinder.Core.Areas.DniproArea
+namespace RentFinder.Core.Areas
 {
     public interface ICity
     {
-        string Name { get;}
+        string Name { get; }
         string LinkPart { get; }
         List<IDistrict> Districts { get; }
+    }
 }

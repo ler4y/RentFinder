@@ -42,6 +42,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskManagement\Commands\ITask.cs" />
+    <Compile Include="TaskManagement\Commands\RepeatedTask.cs" />
+    <Compile Include="TaskManagement\Commands\ScheduledTask.cs" />
+    <Compile Include="TaskManagement\Commands\SimpleTask.cs" />
     <Compile Include="TaskManagement\TaskManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

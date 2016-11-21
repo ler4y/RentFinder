@@ -1,4 +1,4 @@
-﻿using RentFinder.Core.Areas.DniproArea;
+﻿using RentFinder.Core.Areas;
 using RentFinder.Core.RealtyTypes;
 
 namespace RentFinder.Core
