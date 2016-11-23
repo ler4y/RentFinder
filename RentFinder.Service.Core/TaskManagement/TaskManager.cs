@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 using RentFinder.Service.Core.TaskManagement.Commands;
 
@@ -31,7 +32,7 @@ namespace RentFinder.Service.Core.TaskManagement
             _executorThread.Start();
         }
 
-        public void Work()
+        private void Work()
         {
             while (!_cancellationToken.IsCancellationRequested)
             {
@@ -54,6 +55,14 @@ namespace RentFinder.Service.Core.TaskManagement
         public void AddTask(ITask task)
         {
             _tasks.Add(task);
+        }
+
+        public void AddTasks(IEnumerable<ITask> tasks)
+        {
+            foreach (var task in tasks)
+            {
+                _tasks.Add(task);
+            }
         }
     }
 }

@@ -49,6 +49,17 @@ namespace RentFinder.Core
             }
         }
 
+        public void RemoveAd(uint foreignId)
+        {
+            lock (_locker)
+            {
+                foreach (var pair in PhoneAdDictionary)
+                {
+                    pair.Value.Remove(foreignId);
+                }
+            }
+        }
+
         public List<string> GetBlackNumbers(uint maximumAdsForNumber = 2)
         {
             lock (_locker)
