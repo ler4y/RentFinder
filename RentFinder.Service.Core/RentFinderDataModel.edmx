@@ -5,225 +5,23 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="RentFinderModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="ActualAds">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="TempId" Type="nchar" MaxLength="10" Nullable="false" />
-          <Property Name="ForeignId" Type="int" Nullable="false" />
-          <Property Name="Link" Type="nvarchar" MaxLength="200" Nullable="false" />
-          <Property Name="Price" Type="decimal" Precision="16" Scale="2" />
-          <Property Name="Rooms" Type="int" />
-        </EntityType>
-        <EntityType Name="BlackNumbers">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="nchar" MaxLength="10" Nullable="false" />
-        </EntityType>
-        <EntityType Name="BlackPhoneNumberAds">
-          <Key>
-            <PropertyRef Name="BlackNumberId" />
-          </Key>
-          <Property Name="BlackNumberId" Type="nchar" MaxLength="10" Nullable="false" />
-          <Property Name="TempId" Type="nchar" MaxLength="10" Nullable="false" />
-        </EntityType>
-        <EntityType Name="PhoneNumbers">
-          <Key>
-            <PropertyRef Name="ActualAdId" />
-          </Key>
-          <Property Name="ActualAdId" Type="int" Nullable="false" />
-          <Property Name="Number" Type="nchar" MaxLength="10" Nullable="false" />
-        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'RentFinder.Database.dbo.BlackNumbersView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="BlackNumbersView">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="nchar" MaxLength="10" Nullable="false" />
-          <Property Name="AdsCount" Type="int" />
-        </EntityType>
-        <Association Name="FK_BlackPhoneNumberAds_ToBlackPhoneNumbers">
-          <End Role="BlackNumbers" Type="Self.BlackNumbers" Multiplicity="1" />
-          <End Role="BlackPhoneNumberAds" Type="Self.BlackPhoneNumberAds" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="BlackNumbers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BlackPhoneNumberAds">
-              <PropertyRef Name="BlackNumberId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PhoneNumbers_ToActualAds">
-          <End Role="ActualAds" Type="Self.ActualAds" Multiplicity="1" />
-          <End Role="PhoneNumbers" Type="Self.PhoneNumbers" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="ActualAds">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PhoneNumbers">
-              <PropertyRef Name="ActualAdId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="RentFinderModelStoreContainer">
-          <EntitySet Name="ActualAds" EntityType="Self.ActualAds" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BlackNumbers" EntityType="Self.BlackNumbers" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BlackPhoneNumberAds" EntityType="Self.BlackPhoneNumberAds" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PhoneNumbers" EntityType="Self.PhoneNumbers" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BlackNumbersView" EntityType="Self.BlackNumbersView" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [BlackNumbersView].[Id] AS [Id], 
-    [BlackNumbersView].[AdsCount] AS [AdsCount]
-    FROM [dbo].[BlackNumbersView] AS [BlackNumbersView]</DefiningQuery>
-          </EntitySet>
-          <AssociationSet Name="FK_BlackPhoneNumberAds_ToBlackPhoneNumbers" Association="Self.FK_BlackPhoneNumberAds_ToBlackPhoneNumbers">
-            <End Role="BlackNumbers" EntitySet="BlackNumbers" />
-            <End Role="BlackPhoneNumberAds" EntitySet="BlackPhoneNumberAds" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PhoneNumbers_ToActualAds" Association="Self.FK_PhoneNumbers_ToActualAds">
-            <End Role="ActualAds" EntitySet="ActualAds" />
-            <End Role="PhoneNumbers" EntitySet="PhoneNumbers" />
-          </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="RentFinderModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="RentFinderEntities" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="ActualAds" EntityType="RentFinderModel.ActualAd" />
-          <EntitySet Name="BlackNumbers" EntityType="RentFinderModel.BlackNumber" />
-          <EntitySet Name="BlackPhoneNumberAds" EntityType="RentFinderModel.BlackPhoneNumberAd" />
-          <EntitySet Name="PhoneNumbers" EntityType="RentFinderModel.PhoneNumber" />
-          <EntitySet Name="BlackNumbersViews" EntityType="RentFinderModel.BlackNumbersView" />
-          <AssociationSet Name="FK_PhoneNumbers_ToActualAds" Association="RentFinderModel.FK_PhoneNumbers_ToActualAds">
-            <End Role="ActualAd" EntitySet="ActualAds" />
-            <End Role="PhoneNumber" EntitySet="PhoneNumbers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BlackPhoneNumberAds_ToBlackPhoneNumbers" Association="RentFinderModel.FK_BlackPhoneNumberAds_ToBlackPhoneNumbers">
-            <End Role="BlackNumber" EntitySet="BlackNumbers" />
-            <End Role="BlackPhoneNumberAd" EntitySet="BlackPhoneNumberAds" />
-          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="ActualAd">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="TempId" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="ForeignId" Type="Int32" Nullable="false" />
-          <Property Name="Link" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Price" Type="Decimal" Precision="16" Scale="2" />
-          <Property Name="Rooms" Type="Int32" />
-          <NavigationProperty Name="PhoneNumber" Relationship="RentFinderModel.FK_PhoneNumbers_ToActualAds" FromRole="ActualAd" ToRole="PhoneNumber" />
-        </EntityType>
-        <EntityType Name="BlackNumber">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="BlackPhoneNumberAd" Relationship="RentFinderModel.FK_BlackPhoneNumberAds_ToBlackPhoneNumbers" FromRole="BlackNumber" ToRole="BlackPhoneNumberAd" />
-        </EntityType>
-        <EntityType Name="BlackPhoneNumberAd">
-          <Key>
-            <PropertyRef Name="BlackNumberId" />
-          </Key>
-          <Property Name="BlackNumberId" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="TempId" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="BlackNumber" Relationship="RentFinderModel.FK_BlackPhoneNumberAds_ToBlackPhoneNumbers" FromRole="BlackPhoneNumberAd" ToRole="BlackNumber" />
-        </EntityType>
-        <EntityType Name="PhoneNumber">
-          <Key>
-            <PropertyRef Name="ActualAdId" />
-          </Key>
-          <Property Name="ActualAdId" Type="Int32" Nullable="false" />
-          <Property Name="Number" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="ActualAd" Relationship="RentFinderModel.FK_PhoneNumbers_ToActualAds" FromRole="PhoneNumber" ToRole="ActualAd" />
-        </EntityType>
-        <EntityType Name="BlackNumbersView">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="AdsCount" Type="Int32" />
-        </EntityType>
-        <Association Name="FK_PhoneNumbers_ToActualAds">
-          <End Type="RentFinderModel.ActualAd" Role="ActualAd" Multiplicity="1" />
-          <End Type="RentFinderModel.PhoneNumber" Role="PhoneNumber" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="ActualAd">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PhoneNumber">
-              <PropertyRef Name="ActualAdId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BlackPhoneNumberAds_ToBlackPhoneNumbers">
-          <End Type="RentFinderModel.BlackNumber" Role="BlackNumber" Multiplicity="1" />
-          <End Type="RentFinderModel.BlackPhoneNumberAd" Role="BlackPhoneNumberAd" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="BlackNumber">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BlackPhoneNumberAd">
-              <PropertyRef Name="BlackNumberId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="RentFinderModelStoreContainer" CdmEntityContainer="RentFinderEntities" >
-          <EntitySetMapping Name="ActualAds">
-            <EntityTypeMapping TypeName="RentFinderModel.ActualAd">
-              <MappingFragment StoreEntitySet="ActualAds">
-                <ScalarProperty Name="Rooms" ColumnName="Rooms" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Link" ColumnName="Link" />
-                <ScalarProperty Name="ForeignId" ColumnName="ForeignId" />
-                <ScalarProperty Name="TempId" ColumnName="TempId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BlackNumbers">
-            <EntityTypeMapping TypeName="RentFinderModel.BlackNumber">
-              <MappingFragment StoreEntitySet="BlackNumbers">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BlackPhoneNumberAds">
-            <EntityTypeMapping TypeName="RentFinderModel.BlackPhoneNumberAd">
-              <MappingFragment StoreEntitySet="BlackPhoneNumberAds">
-                <ScalarProperty Name="TempId" ColumnName="TempId" />
-                <ScalarProperty Name="BlackNumberId" ColumnName="BlackNumberId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PhoneNumbers">
-            <EntityTypeMapping TypeName="RentFinderModel.PhoneNumber">
-              <MappingFragment StoreEntitySet="PhoneNumbers">
-                <ScalarProperty Name="Number" ColumnName="Number" />
-                <ScalarProperty Name="ActualAdId" ColumnName="ActualAdId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BlackNumbersViews">
-            <EntityTypeMapping TypeName="RentFinderModel.BlackNumbersView">
-              <MappingFragment StoreEntitySet="BlackNumbersView">
-                <ScalarProperty Name="AdsCount" ColumnName="AdsCount" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-        </EntityContainerMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

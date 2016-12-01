@@ -9,7 +9,6 @@ using System.Threading;
 using RentFinder.Model;
 using RentFinder.Core;
 using AngleSharp.Parser.Html;
-using System.Net;
 using AngleSharp.Network.Default;
 using RentFinder.Service.Core.TaskManagement;
 using RentFinder.Service.Core.TaskManagement.Commands;

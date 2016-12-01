@@ -25,10 +25,5 @@ namespace RentFinder.Service.Core
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<ActualAd> ActualAds { get; set; }
-        public virtual DbSet<BlackNumber> BlackNumbers { get; set; }
-        public virtual DbSet<BlackPhoneNumberAd> BlackPhoneNumberAds { get; set; }
-        public virtual DbSet<PhoneNumber> PhoneNumbers { get; set; }
-        public virtual DbSet<BlackNumbersView> BlackNumbersViews { get; set; }
     }
 }

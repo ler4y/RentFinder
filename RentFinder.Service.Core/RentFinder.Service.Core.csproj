@@ -51,21 +51,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActualAd.cs">
-      <DependentUpon>RentFinderDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="BlackNumber.cs">
-      <DependentUpon>RentFinderDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="BlackNumbersView.cs">
-      <DependentUpon>RentFinderDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="BlackPhoneNumberAd.cs">
-      <DependentUpon>RentFinderDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PhoneNumber.cs">
-      <DependentUpon>RentFinderDataModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RentFinderDataModel.Context.cs">
       <AutoGen>True</AutoGen>

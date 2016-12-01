@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RentFinder.Service.Core.TaskManagement.Commands
+﻿namespace RentFinder.Service.Core.TaskManagement.Commands
 {
     public interface ITask
     {
