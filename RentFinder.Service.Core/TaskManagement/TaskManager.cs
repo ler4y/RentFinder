@@ -6,7 +6,7 @@ using RentFinder.Service.Core.TaskManagement.Commands;
 
 namespace RentFinder.Service.Core.TaskManagement
 {
-    public class TaskManager
+    public class TaskManager :ITaskManager
     {
         private CancellationTokenSource _cancellationToken;
         private Thread _executorThread;

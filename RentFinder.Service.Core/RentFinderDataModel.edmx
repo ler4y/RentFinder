@@ -6,22 +6,532 @@
     <edmx:StorageModels>
     <Schema Namespace="RentFinderModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <!--Errors Found During Generation:
+warning 6002: The table/view 'RentFinder.Database.dbo.ActualAds' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ActualAds">
+          <Key>
+            <PropertyRef Name="AdId" />
+            <PropertyRef Name="Price" />
+            <PropertyRef Name="RentalTypeId" />
+            <PropertyRef Name="RealtyTypeId" />
+          </Key>
+          <Property Name="AdId" Type="int" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="16" Scale="2" Nullable="false" />
+          <Property Name="RentalTypeId" Type="int" Nullable="false" />
+          <Property Name="RealtyTypeId" Type="int" Nullable="false" />
+          <Property Name="AreaId" Type="int" />
+          <Property Name="Square" Type="int" />
+          <Property Name="Rooms" Type="int" />
+          <Property Name="Floor" Type="int" />
+        </EntityType>
+        <EntityType Name="Ads">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="TempId" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Link" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'RentFinder.Database.dbo.AdsPhoneNumbers' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="AdsPhoneNumbers">
+          <Key>
+            <PropertyRef Name="AdId" />
+            <PropertyRef Name="NumberId" />
+          </Key>
+          <Property Name="AdId" Type="int" Nullable="false" />
+          <Property Name="NumberId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Areas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="CityId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cities">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PhoneNumbers">
+          <Key>
+            <PropertyRef Name="Number" />
+          </Key>
+          <Property Name="Number" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RealtyTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RentalTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="RealtyTypeId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'RentFinder.Database.dbo.BlackNumbersView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="BlackNumbersView">
+          <Key>
+            <PropertyRef Name="NumberId" />
+          </Key>
+          <Property Name="NumberId" Type="int" Nullable="false" />
+          <Property Name="AdsCount" Type="int" />
+        </EntityType>
+        <Association Name="FK_ActualAds_ToAds">
+          <End Role="Ads" Type="Self.Ads" Multiplicity="1" />
+          <End Role="ActualAds" Type="Self.ActualAds" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ads">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ActualAds">
+              <PropertyRef Name="AdId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ActualAds_ToAreas">
+          <End Role="Areas" Type="Self.Areas" Multiplicity="0..1" />
+          <End Role="ActualAds" Type="Self.ActualAds" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Areas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ActualAds">
+              <PropertyRef Name="AreaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ActualAds_ToRealtyTypes">
+          <End Role="RealtyTypes" Type="Self.RealtyTypes" Multiplicity="1" />
+          <End Role="ActualAds" Type="Self.ActualAds" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RealtyTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ActualAds">
+              <PropertyRef Name="RealtyTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ActualAds_ToRentalTypes">
+          <End Role="RentalTypes" Type="Self.RentalTypes" Multiplicity="1" />
+          <End Role="ActualAds" Type="Self.ActualAds" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RentalTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ActualAds">
+              <PropertyRef Name="RentalTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdsPhoneNumbers_ToAds">
+          <End Role="Ads" Type="Self.Ads" Multiplicity="1" />
+          <End Role="AdsPhoneNumbers" Type="Self.AdsPhoneNumbers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ads">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AdsPhoneNumbers">
+              <PropertyRef Name="AdId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdsPhoneNumbers_ToPhoneNumbers">
+          <End Role="PhoneNumbers" Type="Self.PhoneNumbers" Multiplicity="1" />
+          <End Role="AdsPhoneNumbers" Type="Self.AdsPhoneNumbers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PhoneNumbers">
+              <PropertyRef Name="Number" />
+            </Principal>
+            <Dependent Role="AdsPhoneNumbers">
+              <PropertyRef Name="NumberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Areas_ToCities">
+          <End Role="Cities" Type="Self.Cities" Multiplicity="1" />
+          <End Role="Areas" Type="Self.Areas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cities">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Areas">
+              <PropertyRef Name="CityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentalTypes_ToRealtyTypes">
+          <End Role="RealtyTypes" Type="Self.RealtyTypes" Multiplicity="1" />
+          <End Role="RentalTypes" Type="Self.RentalTypes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RealtyTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RentalTypes">
+              <PropertyRef Name="RealtyTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="RentFinderModelStoreContainer">
-          </EntityContainer>
+          <EntitySet Name="Ads" EntityType="Self.Ads" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Areas" EntityType="Self.Areas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cities" EntityType="Self.Cities" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PhoneNumbers" EntityType="Self.PhoneNumbers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RealtyTypes" EntityType="Self.RealtyTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RentalTypes" EntityType="Self.RentalTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ActualAds" EntityType="Self.ActualAds" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ActualAds].[AdId] AS [AdId], 
+    [ActualAds].[Price] AS [Price], 
+    [ActualAds].[RentalTypeId] AS [RentalTypeId], 
+    [ActualAds].[RealtyTypeId] AS [RealtyTypeId], 
+    [ActualAds].[AreaId] AS [AreaId], 
+    [ActualAds].[Square] AS [Square], 
+    [ActualAds].[Rooms] AS [Rooms], 
+    [ActualAds].[Floor] AS [Floor]
+    FROM [dbo].[ActualAds] AS [ActualAds]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="AdsPhoneNumbers" EntityType="Self.AdsPhoneNumbers" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [AdsPhoneNumbers].[AdId] AS [AdId], 
+    [AdsPhoneNumbers].[NumberId] AS [NumberId]
+    FROM [dbo].[AdsPhoneNumbers] AS [AdsPhoneNumbers]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="BlackNumbersView" EntityType="Self.BlackNumbersView" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [BlackNumbersView].[NumberId] AS [NumberId], 
+    [BlackNumbersView].[AdsCount] AS [AdsCount]
+    FROM [dbo].[BlackNumbersView] AS [BlackNumbersView]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_ActualAds_ToAds" Association="Self.FK_ActualAds_ToAds">
+            <End Role="Ads" EntitySet="Ads" />
+            <End Role="ActualAds" EntitySet="ActualAds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ActualAds_ToAreas" Association="Self.FK_ActualAds_ToAreas">
+            <End Role="Areas" EntitySet="Areas" />
+            <End Role="ActualAds" EntitySet="ActualAds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ActualAds_ToRealtyTypes" Association="Self.FK_ActualAds_ToRealtyTypes">
+            <End Role="RealtyTypes" EntitySet="RealtyTypes" />
+            <End Role="ActualAds" EntitySet="ActualAds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ActualAds_ToRentalTypes" Association="Self.FK_ActualAds_ToRentalTypes">
+            <End Role="RentalTypes" EntitySet="RentalTypes" />
+            <End Role="ActualAds" EntitySet="ActualAds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdsPhoneNumbers_ToAds" Association="Self.FK_AdsPhoneNumbers_ToAds">
+            <End Role="Ads" EntitySet="Ads" />
+            <End Role="AdsPhoneNumbers" EntitySet="AdsPhoneNumbers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdsPhoneNumbers_ToPhoneNumbers" Association="Self.FK_AdsPhoneNumbers_ToPhoneNumbers">
+            <End Role="PhoneNumbers" EntitySet="PhoneNumbers" />
+            <End Role="AdsPhoneNumbers" EntitySet="AdsPhoneNumbers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Areas_ToCities" Association="Self.FK_Areas_ToCities">
+            <End Role="Cities" EntitySet="Cities" />
+            <End Role="Areas" EntitySet="Areas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentalTypes_ToRealtyTypes" Association="Self.FK_RentalTypes_ToRealtyTypes">
+            <End Role="RealtyTypes" EntitySet="RealtyTypes" />
+            <End Role="RentalTypes" EntitySet="RentalTypes" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="RentFinderModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="RentFinderEntities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="Ads" EntityType="RentFinderModel.Ad" />
+          <EntitySet Name="Areas" EntityType="RentFinderModel.Area" />
+          <EntitySet Name="Cities" EntityType="RentFinderModel.City" />
+          <EntitySet Name="PhoneNumbers" EntityType="RentFinderModel.PhoneNumber" />
+          <EntitySet Name="RealtyTypes" EntityType="RentFinderModel.RealtyType" />
+          <EntitySet Name="RentalTypes" EntityType="RentFinderModel.RentalType" />
+          <EntitySet Name="ActualAds" EntityType="RentFinderModel.ActualAd" />
+          <AssociationSet Name="FK_ActualAds_ToAreas" Association="RentFinderModel.FK_ActualAds_ToAreas">
+            <End Role="Area" EntitySet="Areas" />
+            <End Role="ActualAd" EntitySet="ActualAds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Areas_ToCities" Association="RentFinderModel.FK_Areas_ToCities">
+            <End Role="City" EntitySet="Cities" />
+            <End Role="Area" EntitySet="Areas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ActualAds_ToRealtyTypes" Association="RentFinderModel.FK_ActualAds_ToRealtyTypes">
+            <End Role="RealtyType" EntitySet="RealtyTypes" />
+            <End Role="ActualAd" EntitySet="ActualAds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentalTypes_ToRealtyTypes" Association="RentFinderModel.FK_RentalTypes_ToRealtyTypes">
+            <End Role="RealtyType" EntitySet="RealtyTypes" />
+            <End Role="RentalType" EntitySet="RentalTypes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ActualAds_ToRentalTypes" Association="RentFinderModel.FK_ActualAds_ToRentalTypes">
+            <End Role="RentalType" EntitySet="RentalTypes" />
+            <End Role="ActualAd" EntitySet="ActualAds" />
+          </AssociationSet>
+          <AssociationSet Name="AdsPhoneNumbers" Association="RentFinderModel.AdsPhoneNumbers">
+            <End Role="Ad" EntitySet="Ads" />
+            <End Role="PhoneNumber" EntitySet="PhoneNumbers" />
+          </AssociationSet>
+          <EntitySet Name="BlackNumbersViews" EntityType="RentFinderModel.BlackNumbersView" />
+          <AssociationSet Name="FK_ActualAds_ToAds" Association="RentFinderModel.FK_ActualAds_ToAds">
+            <End Role="Ad" EntitySet="Ads" />
+            <End Role="ActualAd" EntitySet="ActualAds" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Ad">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="TempId" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Link" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PhoneNumbers" Relationship="RentFinderModel.AdsPhoneNumbers" FromRole="Ad" ToRole="PhoneNumber" />
+          <NavigationProperty Name="ActualAds" Relationship="RentFinderModel.FK_ActualAds_ToAds" FromRole="Ad" ToRole="ActualAd" />
+        </EntityType>
+        <EntityType Name="Area">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="CityId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="40" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="ActualAds" Relationship="RentFinderModel.FK_ActualAds_ToAreas" FromRole="Area" ToRole="ActualAd" />
+          <NavigationProperty Name="City" Relationship="RentFinderModel.FK_Areas_ToCities" FromRole="Area" ToRole="City" />
+        </EntityType>
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Areas" Relationship="RentFinderModel.FK_Areas_ToCities" FromRole="City" ToRole="Area" />
+        </EntityType>
+        <EntityType Name="PhoneNumber">
+          <Key>
+            <PropertyRef Name="Number" />
+          </Key>
+          <Property Name="Number" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Ads" Relationship="RentFinderModel.AdsPhoneNumbers" FromRole="PhoneNumber" ToRole="Ad" />
+        </EntityType>
+        <EntityType Name="RealtyType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="20" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="ActualAds" Relationship="RentFinderModel.FK_ActualAds_ToRealtyTypes" FromRole="RealtyType" ToRole="ActualAd" />
+          <NavigationProperty Name="RentalTypes" Relationship="RentFinderModel.FK_RentalTypes_ToRealtyTypes" FromRole="RealtyType" ToRole="RentalType" />
+        </EntityType>
+        <EntityType Name="RentalType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="RealtyTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="RealtyType" Relationship="RentFinderModel.FK_RentalTypes_ToRealtyTypes" FromRole="RentalType" ToRole="RealtyType" />
+          <NavigationProperty Name="ActualAds" Relationship="RentFinderModel.FK_ActualAds_ToRentalTypes" FromRole="RentalType" ToRole="ActualAd" />
+        </EntityType>
+        <EntityType Name="ActualAd">
+          <Key>
+            <PropertyRef Name="AdId" />
+            <PropertyRef Name="Price" />
+            <PropertyRef Name="RentalTypeId" />
+            <PropertyRef Name="RealtyTypeId" />
+          </Key>
+          <Property Name="AdId" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="16" Scale="2" />
+          <Property Name="RentalTypeId" Type="Int32" Nullable="false" />
+          <Property Name="RealtyTypeId" Type="Int32" Nullable="false" />
+          <Property Name="AreaId" Type="Int32" />
+          <Property Name="Square" Type="Int32" />
+          <Property Name="Rooms" Type="Int32" />
+          <Property Name="Floor" Type="Int32" />
+          <NavigationProperty Name="Area" Relationship="RentFinderModel.FK_ActualAds_ToAreas" FromRole="ActualAd" ToRole="Area" />
+          <NavigationProperty Name="RealtyType" Relationship="RentFinderModel.FK_ActualAds_ToRealtyTypes" FromRole="ActualAd" ToRole="RealtyType" />
+          <NavigationProperty Name="RentalType" Relationship="RentFinderModel.FK_ActualAds_ToRentalTypes" FromRole="ActualAd" ToRole="RentalType" />
+          <NavigationProperty Name="Ad" Relationship="RentFinderModel.FK_ActualAds_ToAds" FromRole="ActualAd" ToRole="Ad" />
+        </EntityType>
+        <Association Name="FK_ActualAds_ToAreas">
+          <End Type="RentFinderModel.Area" Role="Area" Multiplicity="0..1" />
+          <End Type="RentFinderModel.ActualAd" Role="ActualAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Area">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ActualAd">
+              <PropertyRef Name="AreaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Areas_ToCities">
+          <End Type="RentFinderModel.City" Role="City" Multiplicity="1" />
+          <End Type="RentFinderModel.Area" Role="Area" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Area">
+              <PropertyRef Name="CityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ActualAds_ToRealtyTypes">
+          <End Type="RentFinderModel.RealtyType" Role="RealtyType" Multiplicity="1" />
+          <End Type="RentFinderModel.ActualAd" Role="ActualAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RealtyType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ActualAd">
+              <PropertyRef Name="RealtyTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentalTypes_ToRealtyTypes">
+          <End Type="RentFinderModel.RealtyType" Role="RealtyType" Multiplicity="1" />
+          <End Type="RentFinderModel.RentalType" Role="RentalType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RealtyType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RentalType">
+              <PropertyRef Name="RealtyTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ActualAds_ToRentalTypes">
+          <End Type="RentFinderModel.RentalType" Role="RentalType" Multiplicity="1" />
+          <End Type="RentFinderModel.ActualAd" Role="ActualAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RentalType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ActualAd">
+              <PropertyRef Name="RentalTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AdsPhoneNumbers">
+          <End Type="RentFinderModel.Ad" Role="Ad" Multiplicity="*" />
+          <End Type="RentFinderModel.PhoneNumber" Role="PhoneNumber" Multiplicity="*" />
+        </Association>
+        <EntityType Name="BlackNumbersView">
+          <Key>
+            <PropertyRef Name="NumberId" />
+          </Key>
+          <Property Name="NumberId" Type="Int32" Nullable="false" />
+          <Property Name="AdsCount" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_ActualAds_ToAds">
+          <End Type="RentFinderModel.Ad" Role="Ad" Multiplicity="1" />
+          <End Type="RentFinderModel.ActualAd" Role="ActualAd" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ad">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ActualAd">
+              <PropertyRef Name="AdId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="RentFinderModelStoreContainer" CdmEntityContainer="RentFinderEntities" >
-          </EntityContainerMapping>
+          <EntitySetMapping Name="Ads">
+            <EntityTypeMapping TypeName="RentFinderModel.Ad">
+              <MappingFragment StoreEntitySet="Ads">
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="TempId" ColumnName="TempId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Areas">
+            <EntityTypeMapping TypeName="RentFinderModel.Area">
+              <MappingFragment StoreEntitySet="Areas">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CityId" ColumnName="CityId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cities">
+            <EntityTypeMapping TypeName="RentFinderModel.City">
+              <MappingFragment StoreEntitySet="Cities">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PhoneNumbers">
+            <EntityTypeMapping TypeName="RentFinderModel.PhoneNumber">
+              <MappingFragment StoreEntitySet="PhoneNumbers">
+                <ScalarProperty Name="Number" ColumnName="Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RealtyTypes">
+            <EntityTypeMapping TypeName="RentFinderModel.RealtyType">
+              <MappingFragment StoreEntitySet="RealtyTypes">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RentalTypes">
+            <EntityTypeMapping TypeName="RentFinderModel.RentalType">
+              <MappingFragment StoreEntitySet="RentalTypes">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="RealtyTypeId" ColumnName="RealtyTypeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ActualAds">
+            <EntityTypeMapping TypeName="RentFinderModel.ActualAd">
+              <MappingFragment StoreEntitySet="ActualAds">
+                <ScalarProperty Name="Floor" ColumnName="Floor" />
+                <ScalarProperty Name="Rooms" ColumnName="Rooms" />
+                <ScalarProperty Name="Square" ColumnName="Square" />
+                <ScalarProperty Name="AreaId" ColumnName="AreaId" />
+                <ScalarProperty Name="RealtyTypeId" ColumnName="RealtyTypeId" />
+                <ScalarProperty Name="RentalTypeId" ColumnName="RentalTypeId" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="AdId" ColumnName="AdId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AdsPhoneNumbers" TypeName="RentFinderModel.AdsPhoneNumbers" StoreEntitySet="AdsPhoneNumbers">
+            <EndProperty Name="PhoneNumber">
+              <ScalarProperty Name="Number" ColumnName="NumberId" />
+            </EndProperty>
+            <EndProperty Name="Ad">
+              <ScalarProperty Name="Id" ColumnName="AdId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="BlackNumbersViews">
+            <EntityTypeMapping TypeName="RentFinderModel.BlackNumbersView">
+              <MappingFragment StoreEntitySet="BlackNumbersView">
+                <ScalarProperty Name="AdsCount" ColumnName="AdsCount" />
+                <ScalarProperty Name="NumberId" ColumnName="NumberId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

@@ -2,18 +2,18 @@
 
 namespace RentFinder.Service.Core.TaskManagement.Commands
 {
-    public class ScheduledTask:ITask
+    public class ScheduledTask:BaseTask
     {
         private readonly Action _action;
         private readonly DateTime _invokationDateTime;
 
-        public ScheduledTask(Action action, DateTime invocationDateTime)
+        public ScheduledTask(ITaskManager taskManager, Action action, DateTime invocationDateTime):base(taskManager)
         {
             _invokationDateTime = invocationDateTime;
             _action = action;
         }
 
-        public void Execute()
+        public override void Execute()
         {
             if (DateTime.Now > _invokationDateTime)
             {
@@ -21,7 +21,5 @@ namespace RentFinder.Service.Core.TaskManagement.Commands
                 IsExecuted = true;
             }
         }
-
-        public bool IsExecuted { get; private set; }
     }
 }

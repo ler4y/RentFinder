@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AngleSharp">
+      <HintPath>..\packages\AngleSharp.0.9.9\lib\net45\AngleSharp.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -51,7 +54,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActualAd.cs">
+      <DependentUpon>RentFinderDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Ad.cs">
+      <DependentUpon>RentFinderDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Area.cs">
+      <DependentUpon>RentFinderDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BlackNumbersView.cs">
+      <DependentUpon>RentFinderDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="City.cs">
+      <DependentUpon>RentFinderDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PhoneNumber.cs">
+      <DependentUpon>RentFinderDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RealtyType.cs">
+      <DependentUpon>RentFinderDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RentalType.cs">
+      <DependentUpon>RentFinderDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RentFinderDataModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -67,11 +94,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>RentFinderDataModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="TaskManagement\Commands\BaseTask.cs" />
     <Compile Include="TaskManagement\Commands\ITask.cs" />
     <Compile Include="TaskManagement\Commands\RepeatedTask.cs" />
     <Compile Include="TaskManagement\Commands\ScheduledTask.cs" />
     <Compile Include="TaskManagement\Commands\SimpleTask.cs" />
+    <Compile Include="TaskManagement\Commands\TaskExtensions.cs" />
+    <Compile Include="TaskManagement\Commands\UntilSuccessTask.cs" />
+    <Compile Include="TaskManagement\ITaskManager.cs" />
     <Compile Include="TaskManagement\TaskManager.cs" />
+    <Compile Include="Tasks\GetPagesCountTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

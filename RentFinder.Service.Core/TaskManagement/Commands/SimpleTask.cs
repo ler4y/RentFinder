@@ -2,20 +2,18 @@
 
 namespace RentFinder.Service.Core.TaskManagement.Commands
 {
-    public class SimpleTask:ITask
+    public class SimpleTask:BaseTask
     {
         private readonly Action _action;
-        public SimpleTask(Action action)
+        public SimpleTask(ITaskManager taskManager, Action action):base(taskManager)
         {
             _action = action;
         }
 
-        public void Execute()
+        public override void Execute()
         {
             _action();
             IsExecuted = true;
         }
-
-        public bool IsExecuted { get; private set; }
     }
 }

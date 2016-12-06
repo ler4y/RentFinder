@@ -2,13 +2,13 @@
 
 namespace RentFinder.Service.Core.TaskManagement.Commands
 {
-    public class RepeatedTask:ITask
+    public class RepeatedTask:BaseTask
     {
         private readonly Action _action;
         private readonly TimeSpan _timeSpan;
         private DateTime _lastExecutedTime;
 
-        public RepeatedTask(Action action, TimeSpan timeSpan, TimeSpan? delay = null)
+        public RepeatedTask(ITaskManager taskManager, Action action, TimeSpan timeSpan, TimeSpan? delay = null):base(taskManager)
         {
             if (delay.HasValue)
                 _lastExecutedTime = DateTime.Now.Add(delay.Value);
@@ -16,15 +16,13 @@ namespace RentFinder.Service.Core.TaskManagement.Commands
             _timeSpan = timeSpan;
         }
 
-        public void Execute()
+        public override void Execute()
         {
             if (_lastExecutedTime == default(DateTime) || _lastExecutedTime.Add(_timeSpan) < DateTime.Now)
             {
                 _action();
                 _lastExecutedTime = DateTime.Now;
-            }  
+            }
         }
-
-        public bool IsExecuted { get; } = false;
     }
 }

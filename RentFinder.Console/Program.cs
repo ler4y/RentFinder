@@ -9,9 +9,9 @@ using System.Threading;
 using RentFinder.Model;
 using RentFinder.Core;
 using AngleSharp.Parser.Html;
-using AngleSharp.Network.Default;
 using RentFinder.Service.Core.TaskManagement;
 using RentFinder.Service.Core.TaskManagement.Commands;
+using RentFinder.Service.Core.Tasks;
 
 namespace RentFinder.Console
 {
@@ -27,7 +27,12 @@ namespace RentFinder.Console
         private static void TestTaskmanager()
         {
             var tm = new TaskManager();
-            tm.AddTask(new RepeatedTask(new Action(()=>System.Console.WriteLine(DateTime.Now)), new TimeSpan(0,0,0,5)));
+            var brContextFactory = new BrowsingContextFactory();
+            var t =
+                new GetPagesCountTask(tm, "https://www.olx.ua/nedvizhimost/arenda-kvartir/dolgosrochnaya-arenda-kvartir/dnepropetrovsk/", brContextFactory.GetNew());
+            t.ContinueWith(new SimpleTask(tm,
+                    () => System.Console.WriteLine("PagesCount: {0}", t.Result)));
+            tm.AddTask(t);
             tm.Start();
         }
 
@@ -111,55 +116,62 @@ namespace RentFinder.Console
             var res = new List<PreviewAdModel>();
             var brContextFactory = new BrowsingContextFactory();
             var linkPage = "?page={0}";
-            var regexPattern = "ID(.*).html";
 
-           
-            var processedIds = new List<string>();
             var pagesCount = GetPagesCount(link, brContextFactory.GetNew());
             for (int i = 1; i <= pagesCount; i++)
             {
-                var requester = new HttpRequester();
-                requester.Headers["User-Agent"] = Guid.NewGuid().ToString().Replace("-","");
-                var configuration = Configuration.Default.WithDefaultLoader(requesters: new[] { requester });
-                var brContext = BrowsingContext.New(configuration);
-                for (int j = 0; j < 3; j++)
-                {
-                    System.Console.WriteLine("Processing page: {0}", i);
-                    var procLink = i == 1 ? link : link + string.Format(linkPage, i);
-                    var task = brContext.OpenAsync(procLink);
-                    var doc = task.Result;
-                    var offers = doc.QuerySelectorAll(".offer");
-                    if (offers.Count() == 0) { Thread.Sleep(3000); }
-                    else
-                    {
-                        var k = 1;
-                        foreach (var offer in offers)
-                        {
-                            try
-                            {
-                                System.Console.WriteLine("\tProcessing offer: {0}", k);
-                                var resLink = new PreviewAdModel();
-                                resLink.AdId = uint.Parse(offer.Children.First().Attributes["data-id"].Value);
-                                resLink.TempId = Regex.Match(offer.QuerySelector(".detailsLink").Attributes["href"].Value, regexPattern).Groups[1].Value;
-                                var priceString = offer.QuerySelector(".price").Children.First().InnerHtml;
-                                resLink.Price = double.Parse(Regex.Replace(priceString, "[А-Яа-яA-Za-z$ .]", ""));
-                                resLink.PhoneNumbers.AddRange(GetPhoneNumbers(resLink.TempId, brContextFactory.GetNew()));
-                                res.Add(resLink);
-                                k++;
+                
+                var procLink = i == 1 ? link : link + string.Format(linkPage, i);
 
-                            }
-                            catch (Exception ex)
-                            {
-                                System.Console.WriteLine(ex.Message);
-                            }
-                        }
-                        break;
-                    }
-
-                }
+                res.AddRange(GetPreviewModels(brContextFactory, procLink));
                 System.Console.WriteLine();
             }
 
+            return res;
+        }
+
+        private static List<PreviewAdModel> GetPreviewModels(BrowsingContextFactory brContextFactory, string procLink)
+        {
+            List<PreviewAdModel> res =new List<PreviewAdModel>();
+            for (int j = 0; j < 3; j++)
+            {
+                System.Console.WriteLine("Processing page: {0}", procLink);
+                var regexPattern = "ID(.*).html";
+                var brContext = brContextFactory.GetNew();
+                var task = brContext.OpenAsync(procLink);
+                var doc = task.Result;
+                var offers = doc.QuerySelectorAll(".offer");
+                if (!offers.Any())
+                {
+                    Thread.Sleep(3000);
+                }
+                else
+                {
+                    var k = 1;
+                    foreach (var offer in offers)
+                    {
+                        try
+                        {
+                            System.Console.WriteLine("\tProcessing offer: {0}", k);
+                            var resLink = new PreviewAdModel();
+                            resLink.AdId = uint.Parse(offer.Children.First().Attributes["data-id"].Value);
+                            resLink.TempId =
+                                Regex.Match(offer.QuerySelector(".detailsLink").Attributes["href"].Value, regexPattern).Groups[1
+                                    ].Value;
+                            var priceString = offer.QuerySelector(".price").Children.First().InnerHtml;
+                            resLink.Price = double.Parse(Regex.Replace(priceString, "[А-Яа-яA-Za-z$ .]", ""));
+                            resLink.PhoneNumbers.AddRange(GetPhoneNumbers(resLink.TempId, brContextFactory.GetNew()));
+                            res.Add(resLink);
+                            k++;
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Console.WriteLine(ex.Message);
+                        }
+                    }
+                    break;
+                }
+            }
             return res;
         }
 

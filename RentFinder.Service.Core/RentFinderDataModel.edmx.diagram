@@ -5,7 +5,22 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="ccce58a508834b60b84f2a4f879f444e" Name="Diagram1" >
-        </Diagram>
+        <EntityTypeShape EntityType="RentFinderModel.Ad" Width="1.5" PointX="5.75" PointY="1.625" />
+        <EntityTypeShape EntityType="RentFinderModel.Area" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="RentFinderModel.City" Width="1.5" PointX="0.75" PointY="1.125" />
+        <EntityTypeShape EntityType="RentFinderModel.PhoneNumber" Width="1.5" PointX="8" PointY="1.75" />
+        <EntityTypeShape EntityType="RentFinderModel.RealtyType" Width="1.5" PointX="0.75" PointY="3.875" />
+        <EntityTypeShape EntityType="RentFinderModel.RentalType" Width="1.5" PointX="3" PointY="7.625" />
+        <EntityTypeShape EntityType="RentFinderModel.ActualAd" Width="1.5" PointX="5.25" PointY="5.125" />
+        <AssociationConnector Association="RentFinderModel.FK_ActualAds_ToAreas" />
+        <AssociationConnector Association="RentFinderModel.FK_Areas_ToCities" />
+        <AssociationConnector Association="RentFinderModel.FK_ActualAds_ToRealtyTypes" />
+        <AssociationConnector Association="RentFinderModel.FK_RentalTypes_ToRealtyTypes" />
+        <AssociationConnector Association="RentFinderModel.FK_ActualAds_ToRentalTypes" />
+        <AssociationConnector Association="RentFinderModel.AdsPhoneNumbers" />
+        <EntityTypeShape EntityType="RentFinderModel.BlackNumbersView" Width="1.5" PointX="7.375" PointY="4.75" />
+        <AssociationConnector Association="RentFinderModel.FK_ActualAds_ToAds" />
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

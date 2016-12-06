@@ -22,6 +22,7 @@ namespace RentFinder.Console
             
             List<ITask> tasks = new List<ITask>();
 
+            
             //tasks.AddRange(); //add tasks to check actual ads
             //tasks.AddRange(); //add tasks to check black ads
             //tasks.AddRange(); //add tasks to get actual data
