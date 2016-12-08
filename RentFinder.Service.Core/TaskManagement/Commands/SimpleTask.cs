@@ -1,19 +1,22 @@
 ﻿using System;
+using RentFinder.Service.Core.Tasks;
 
 namespace RentFinder.Service.Core.TaskManagement.Commands
 {
-    public class SimpleTask:BaseTask
+    public class SimpleTask<T> : BaseTask, ITask<T>
     {
-        private readonly Action _action;
-        public SimpleTask(ITaskManager taskManager, Action action):base(taskManager)
+        private readonly Func<T> _func;
+        public SimpleTask(ITaskManager taskManager, Func<T> action) : base(taskManager)
         {
-            _action = action;
+            _func = action;
         }
 
         public override void Execute()
         {
-            _action();
+            Result = _func();
             IsExecuted = true;
         }
+
+        public T Result { get; private set; }
     }
 }

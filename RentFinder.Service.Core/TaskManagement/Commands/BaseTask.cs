@@ -5,14 +5,13 @@ namespace RentFinder.Service.Core.TaskManagement.Commands
     public abstract class BaseTask : ITask
     {
         private bool _isExecuted;
-        protected ITaskManager _taskManager;
         protected BaseTask(ITaskManager taskManager)
         {
             if (taskManager == null) throw new ArgumentNullException(nameof(taskManager));
 
-            _taskManager = taskManager;
+            TaskManager = taskManager;
         }
-        public ITaskManager TaskManager => _taskManager;
+        public ITaskManager TaskManager { get; private set; }
         public abstract void Execute();
         public bool IsExecuted
         {

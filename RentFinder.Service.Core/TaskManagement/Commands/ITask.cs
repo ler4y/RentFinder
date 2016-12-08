@@ -11,7 +11,6 @@ namespace RentFinder.Service.Core.TaskManagement.Commands
     }
     public interface ITask<out T>:ITask
     {
-        T ExecuteResult();
         T Result { get; }
     }
 }

@@ -9,6 +9,7 @@ using System.Threading;
 using RentFinder.Model;
 using RentFinder.Core;
 using AngleSharp.Parser.Html;
+using Jint.Parser.Ast;
 using RentFinder.Service.Core.TaskManagement;
 using RentFinder.Service.Core.TaskManagement.Commands;
 using RentFinder.Service.Core.Tasks;
@@ -28,11 +29,27 @@ namespace RentFinder.Console
         {
             var tm = new TaskManager();
             var brContextFactory = new BrowsingContextFactory();
-            var t =
-                new GetPagesCountTask(tm, "https://www.olx.ua/nedvizhimost/arenda-kvartir/dolgosrochnaya-arenda-kvartir/dnepropetrovsk/", brContextFactory.GetNew());
-            t.ContinueWith(new SimpleTask(tm,
-                    () => System.Console.WriteLine("PagesCount: {0}", t.Result)));
-            tm.AddTask(t);
+            var link = "https://www.olx.ua/nedvizhimost/arenda-kvartir/dolgosrochnaya-arenda-kvartir/dnepropetrovsk/";
+            var getPagesCountTask = new GetPagesCountActivity(link, brContextFactory.GetNew()).AsSimpleTask(tm);
+            var printPagesCountTask = new SimpleTask<object>(tm, () =>
+            {
+                System.Console.WriteLine("PagesCount: {0}", getPagesCountTask.Result);
+                return new object();
+            });
+            printPagesCountTask.ContinueWith(() =>
+            {
+                var linkPage = "?page={0}";
+                var tasks = new ITask<IEnumerable<PreviewAdModel>>[getPagesCountTask.Result];
+                for (int i = 1; i <= getPagesCountTask.Result; i++)
+                {
+                    var procLink = i == 1 ? link : link + string.Format(linkPage, i);
+                    tasks[i-1]=new GetPreviewModelsActivity(procLink, brContextFactory).AsSimpleTask(tm);
+                }
+                tasks.ForEach(s=>s.ContinueWith(()=> { return new SimpleTask<object>(s.TaskManager, () => { s.Result.ForEach(k=>System.Console.WriteLine(k.Price)); return new object();});}));
+                return tasks;
+            });
+            getPagesCountTask.ContinueWith(printPagesCountTask);
+            tm.AddTask(getPagesCountTask);
             tm.Start();
         }
 
