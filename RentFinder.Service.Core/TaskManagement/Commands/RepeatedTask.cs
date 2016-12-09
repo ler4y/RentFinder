@@ -8,7 +8,7 @@ namespace RentFinder.Service.Core.TaskManagement.Commands
         private readonly TimeSpan _timeSpan;
         private DateTime _lastExecutedTime;
 
-        public RepeatedTask(ITaskManager taskManager, Action action, TimeSpan timeSpan, TimeSpan? delay = null):base(taskManager)
+        public RepeatedTask(Action action, TimeSpan timeSpan, TimeSpan? delay = null)
         {
             if (delay.HasValue)
                 _lastExecutedTime = DateTime.Now.Add(delay.Value);

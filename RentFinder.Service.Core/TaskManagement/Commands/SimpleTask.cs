@@ -6,7 +6,7 @@ namespace RentFinder.Service.Core.TaskManagement.Commands
     public class SimpleTask<T> : BaseTask, ITask<T>
     {
         private readonly Func<T> _func;
-        public SimpleTask(ITaskManager taskManager, Func<T> action) : base(taskManager)
+        public SimpleTask(Func<T> action) 
         {
             _func = action;
         }

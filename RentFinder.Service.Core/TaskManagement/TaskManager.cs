@@ -11,7 +11,7 @@ namespace RentFinder.Service.Core.TaskManagement
         private CancellationTokenSource _cancellationToken;
         private Thread _executorThread;
         private readonly ConcurrentBag<ITask> _tasks = new ConcurrentBag<ITask>();
-        private TimeSpan _delayTimeSpan = new TimeSpan(0,0,1);
+        private TimeSpan _delayTimeSpan = new TimeSpan(0,0,10);
 
         public TimeSpan DelayBettweenExecutions
         {
@@ -39,7 +39,7 @@ namespace RentFinder.Service.Core.TaskManagement
                 ITask task;
                 if (_tasks.TryTake(out task))
                 {
-                    task.Execute();
+                    task.Execute(this);
                     if (!task.IsExecuted)
                         _tasks.Add(task);
                 }

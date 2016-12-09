@@ -29,9 +29,9 @@ namespace RentFinder.Console
         {
             var tm = new TaskManager();
             var brContextFactory = new BrowsingContextFactory();
-            var link = "https://www.olx.ua/nedvizhimost/arenda-kvartir/dolgosrochnaya-arenda-kvartir/dnepropetrovsk/";
+            var link = "https://www.olx.ua/nedvizhimost/arenda-kvartir/dolgosrochnaya-arenda-kvartir/dnepr/";
             var getPagesCountTask = new GetPagesCountActivity(link, brContextFactory.GetNew()).AsSimpleTask(tm);
-            var printPagesCountTask = new SimpleTask<object>(tm, () =>
+            var printPagesCountTask = new SimpleTask<object>(() =>
             {
                 System.Console.WriteLine("PagesCount: {0}", getPagesCountTask.Result);
                 return new object();
@@ -45,7 +45,12 @@ namespace RentFinder.Console
                     var procLink = i == 1 ? link : link + string.Format(linkPage, i);
                     tasks[i-1]=new GetPreviewModelsActivity(procLink, brContextFactory).AsSimpleTask(tm);
                 }
-                tasks.ForEach(s=>s.ContinueWith(()=> { return new SimpleTask<object>(s.TaskManager, () => { s.Result.ForEach(k=>System.Console.WriteLine(k.Price)); return new object();});}));
+                tasks.ForEach(s=>s.ContinueWith(()=> { return new SimpleTask<object>(() => { s.Result.ForEach(k=>System.Console.WriteLine(k.Price)); return new object();});}));
+                tasks.ContinueWith(new SimpleTask<object>(() =>
+                {
+                    System.Console.WriteLine("Completed");
+                    return new object();
+                }));
                 return tasks;
             });
             getPagesCountTask.ContinueWith(printPagesCountTask);

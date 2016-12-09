@@ -5,7 +5,7 @@ namespace RentFinder.Service.Core.TaskManagement.Commands
     public interface ITask
     {
         ITaskManager TaskManager { get; }
-        void Execute();
+        void Execute( ITaskManager taskManager);
         bool IsExecuted { get; }
         event EventHandler Executed;
     }

@@ -9,7 +9,7 @@ namespace RentFinder.Service.Core.TaskManagement.Commands
 
         private uint _currentEffort;
 
-        public UntilSuccessTask(ITaskManager taskManager, Func<bool> func, uint maxEfforts = 3):base(taskManager)
+        public UntilSuccessTask(Func<bool> func, uint maxEfforts = 3)
         {
             _func = func;
             _maxEfforts = maxEfforts;

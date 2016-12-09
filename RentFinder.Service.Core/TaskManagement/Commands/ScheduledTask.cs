@@ -7,7 +7,7 @@ namespace RentFinder.Service.Core.TaskManagement.Commands
         private readonly Action _action;
         private readonly DateTime _invokationDateTime;
 
-        public ScheduledTask(ITaskManager taskManager, Action action, DateTime invocationDateTime):base(taskManager)
+        public ScheduledTask(Action action, DateTime invocationDateTime)
         {
             _invokationDateTime = invocationDateTime;
             _action = action;
