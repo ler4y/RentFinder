@@ -1,18 +1,25 @@
 ﻿using System;
+using RentFinder.Service.Core.Tasks;
 
 namespace RentFinder.Service.Core.TaskManagement.Commands
 {
     public class RepeatedTask:BaseTask
     {
-        private readonly Action _action;
         private readonly TimeSpan _timeSpan;
         private DateTime _lastExecutedTime;
 
-        public RepeatedTask(Action action, TimeSpan timeSpan, TimeSpan? delay = null)
+        public RepeatedTask(Action action, TimeSpan timeSpan, TimeSpan? delay = null):base(new BaseActivity(action))
         {
             if (delay.HasValue)
                 _lastExecutedTime = DateTime.Now.Add(delay.Value);
-            _action = action;
+            _timeSpan = timeSpan;
+        }
+
+        public RepeatedTask(IActivity action, TimeSpan timeSpan, TimeSpan? delay = null) : base(action)
+        {
+            if (delay.HasValue)
+                _lastExecutedTime = DateTime.Now.Add(delay.Value);
+           
             _timeSpan = timeSpan;
         }
 
@@ -20,7 +27,7 @@ namespace RentFinder.Service.Core.TaskManagement.Commands
         {
             if (_lastExecutedTime == default(DateTime) || _lastExecutedTime.Add(_timeSpan) < DateTime.Now)
             {
-                _action();
+                Activity.Run();
                 _lastExecutedTime = DateTime.Now;
             }
         }

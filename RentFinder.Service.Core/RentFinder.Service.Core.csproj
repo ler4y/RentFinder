@@ -112,6 +112,7 @@
     <Compile Include="TaskManagement\ITaskManager.cs" />
     <Compile Include="TaskManagement\TaskManager.cs" />
     <Compile Include="Tasks\ActivityExtensions.cs" />
+    <Compile Include="Tasks\BaseActivity.cs" />
     <Compile Include="Tasks\GetPagesCountTask.cs" />
     <Compile Include="Tasks\GetPreviewModelsActivity.cs" />
     <Compile Include="Tasks\IActivity.cs" />

@@ -5,11 +5,12 @@ using AngleSharp;
 using System.Text.RegularExpressions;
 using MoreLinq;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using RentFinder.Model;
 using RentFinder.Core;
 using AngleSharp.Parser.Html;
-using Jint.Parser.Ast;
 using RentFinder.Service.Core.TaskManagement;
 using RentFinder.Service.Core.TaskManagement.Commands;
 using RentFinder.Service.Core.Tasks;
@@ -31,11 +32,7 @@ namespace RentFinder.Console
             var brContextFactory = new BrowsingContextFactory();
             var link = "https://www.olx.ua/nedvizhimost/arenda-kvartir/dolgosrochnaya-arenda-kvartir/dnepr/";
             var getPagesCountTask = new GetPagesCountActivity(link, brContextFactory.GetNew()).AsSimpleTask(tm);
-            var printPagesCountTask = new SimpleTask<object>(() =>
-            {
-                System.Console.WriteLine("PagesCount: {0}", getPagesCountTask.Result);
-                return new object();
-            });
+            var printPagesCountTask = new SimpleTask(() => System.Console.WriteLine("PagesCount: {0}", getPagesCountTask.Result));
             printPagesCountTask.ContinueWith(() =>
             {
                 var linkPage = "?page={0}";
@@ -45,14 +42,13 @@ namespace RentFinder.Console
                     var procLink = i == 1 ? link : link + string.Format(linkPage, i);
                     tasks[i-1]=new GetPreviewModelsActivity(procLink, brContextFactory).AsSimpleTask(tm);
                 }
-                tasks.ForEach(s=>s.ContinueWith(()=> { return new SimpleTask<object>(() => { s.Result.ForEach(k=>System.Console.WriteLine(k.Price)); return new object();});}));
-                tasks.ContinueWith(new SimpleTask<object>(() =>
+                tasks.ForEach(s=>s.ContinueWith(()=> { return new SimpleTask(() => { s.Result.ForEach(k=>System.Console.WriteLine(k.Price));});}));
+             /*   tasks.ContinueWith(new SimpleTask(() =>
                 {
                     System.Console.WriteLine("Completed");
-                    return new object();
-                }));
+                }));*/
                 return tasks;
-            });
+            }).ContinueWith(() => { return new SimpleTask(()=> System.Console.WriteLine("Completed"));});
             getPagesCountTask.ContinueWith(printPagesCountTask);
             tm.AddTask(getPagesCountTask);
             tm.Start();

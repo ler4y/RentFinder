@@ -8,7 +8,7 @@ namespace RentFinder.Service.Core.Tasks
     {
         public static ITask<T> AsSimpleTask<T>(this IActivity<T> activity, ITaskManager taskManager)
         {
-            return new SimpleTask<T>(activity.Func);
+            return new SimpleTask<T>(activity);
         }
     }
 }

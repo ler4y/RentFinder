@@ -20,9 +20,14 @@ namespace RentFinder.Service.Core.Tasks
             _link = link;
             _brContextFactory = brContextFactory;
             _maxEfforts = maxEfforts;
-            Func = GetPreviewModels;
         }
-        public Func<IEnumerable<PreviewAdModel>> Func { get; }
+
+        public void Run()
+        {
+            Result = GetPreviewModels();
+        }
+
+        public IEnumerable<PreviewAdModel> Result { get; private set; }
 
         private List<PreviewAdModel> GetPreviewModels()
         {
@@ -111,7 +116,5 @@ namespace RentFinder.Service.Core.Tasks
             input = Regex.Replace(input, @"[()\-\+]|\s|[a-zA-Z]", "");
             return Regex.Replace(input, @"^38|^8", "");
         }
-
-      
     }
 }

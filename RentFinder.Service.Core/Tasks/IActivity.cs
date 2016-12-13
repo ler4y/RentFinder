@@ -2,8 +2,13 @@
 
 namespace RentFinder.Service.Core.Tasks
 {
-    public interface IActivity<T>
+
+    public interface IActivity
     {
-        Func<T> Func { get; }
+        void Run();
+    }
+    public interface IActivity<T>: IActivity
+    {
+        T Result { get; }
     }
 }

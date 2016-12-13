@@ -14,7 +14,7 @@ namespace RentFinder.Service.Core.Tasks
             _browsingContext = brContext;
             Func = GetPagesCount;
         }
-        public void Action()
+        public void Run()
         {
             Result = GetPagesCount();
             Completed?.Invoke(this, Result);
