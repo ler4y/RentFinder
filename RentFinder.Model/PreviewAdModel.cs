@@ -2,7 +2,7 @@
 
 namespace RentFinder.Model
 {
-    public class PreviewAdModel
+    public class PreviewAdModel: IAddModel
     {
         public uint AdId { get; set; }
         public string TempId { get; set; }

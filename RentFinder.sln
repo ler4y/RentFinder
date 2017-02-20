@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentFinder.Service.Core", "
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RentFinder.Database", "..\..\..\Documents\Visual Studio 2015\Projects\RentFinder.Database\RentFinder.Database.sqlproj", "{5DEE9877-DA23-431D-A780-FA8479A963E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentFinder.Roma", "RentFinder.Roma\RentFinder.Roma.csproj", "{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +155,22 @@ Global
 		{5DEE9877-DA23-431D-A780-FA8479A963E9}.Release|x86.ActiveCfg = Release|Any CPU
 		{5DEE9877-DA23-431D-A780-FA8479A963E9}.Release|x86.Build.0 = Release|Any CPU
 		{5DEE9877-DA23-431D-A780-FA8479A963E9}.Release|x86.Deploy.0 = Release|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Debug|ARM.Build.0 = Debug|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Debug|x64.Build.0 = Debug|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Debug|x86.Build.0 = Debug|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Release|ARM.ActiveCfg = Release|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Release|ARM.Build.0 = Release|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Release|x64.ActiveCfg = Release|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Release|x64.Build.0 = Release|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Release|x86.ActiveCfg = Release|Any CPU
+		{36FFFC89-73A8-4ED6-8BFB-4DEFB473E866}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

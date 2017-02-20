@@ -2,7 +2,7 @@
 
 namespace RentFinder.Model
 {
-    public class AdModel
+    public class AdModel: IAddModel
     {
         public AdModel()
         {
@@ -10,7 +10,7 @@ namespace RentFinder.Model
         }
 
         public string TempId { get; set; }
-        public uint AdNumber { get; set; }
+        public uint AdId { get; set; }
         public string Link { get; set; }
         public List<string> PhoneNumbers { get; private set; }
         public double Price { get; set; }

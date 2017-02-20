@@ -11,7 +11,7 @@ namespace RentFinder.Core
         private readonly object _locker = new object();
         private Dictionary<string, List<uint>> PhoneAdDictionary { get; set; } = new Dictionary<string, List<uint>>();
 
-        public void AddAd(PreviewAdModel model)
+        public void AddAd(IAddModel model)
         {
             foreach (var number in model.PhoneNumbers)
             {
@@ -29,7 +29,7 @@ namespace RentFinder.Core
 
         }
 
-        public void BulkAdd(IEnumerable<PreviewAdModel> modelList)
+        public void BulkAdd(IEnumerable<IAddModel> modelList)
         {
             lock (_locker)
             {
