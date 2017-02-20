@@ -33,13 +33,13 @@ namespace RentFinder.Roma
             res = res.DistinctBy(s => s.TempId).ToList();
             var blackNumberManager = new BlackNumberManager();
             blackNumberManager.BulkAdd(res);
-            var maxAdsForNumber = ConfigurationManager.AppSettings["MaxAdsForNumber"];
-            var blackNumbers = blackNumberManager.GetBlackNumbers();
+            var maxAdsForNumber = uint.Parse(ConfigurationManager.AppSettings["MaxAdsForNumber"]);
+            var blackNumbers = blackNumberManager.GetBlackNumbers(maxAdsForNumber);
 
             var minPrice = double.Parse(ConfigurationManager.AppSettings["MinPrice"]);
             var maxPrice = double.Parse(ConfigurationManager.AppSettings["MaxPrice"]);
 
-            var forReport = res.Where(s => !s.PhoneNumbers.Any(c => blackNumbers.Contains(c))).ToList();
+            var forReport = res.Where(s => s.PhoneNumbers.All(c => !blackNumbers.Contains(c))).ToList();
             forReport = res.Where(s => s.Price > minPrice && s.Price < maxPrice).ToList();
 
             using (var sw = new StreamWriter("Result_report.txt"))
