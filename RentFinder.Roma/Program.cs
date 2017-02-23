@@ -21,7 +21,25 @@ namespace RentFinder.Roma
         static void Main(string[] args)
         {
             log4net.Config.XmlConfigurator.Configure();
-            ForRoma();
+            //ForRoma();
+            var list = new List<string>();
+            using (var sr = new StreamReader("Result_report.txt"))
+            {
+                sr.ReadLine();
+                while (!sr.EndOfStream)
+                {
+                    list.Add(sr.ReadLine());
+                }
+                list.Sort();
+            }
+            using (var sw = new StreamWriter("Result_report_sorted.txt"))
+            {
+                sw.WriteLine("Ads count: {0}", list.Count);
+                foreach (var ad in list)
+                {
+                    sw.WriteLine(ad);
+                }
+            }
             Console.WriteLine("Press ENTER to exit app");
             Console.ReadLine();
         }
@@ -39,8 +57,9 @@ namespace RentFinder.Roma
             var minPrice = double.Parse(ConfigurationManager.AppSettings["MinPrice"]);
             var maxPrice = double.Parse(ConfigurationManager.AppSettings["MaxPrice"]);
 
-            var forReport = res.Where(s => s.PhoneNumbers.All(c => !blackNumbers.Contains(c))).ToList();
-            forReport = res.Where(s => s.Price > minPrice && s.Price < maxPrice).ToList();
+            var forReport = res.Where(s => s.IsPrivate).ToList();
+            forReport = forReport.Where(s =>s.PhoneNumbers.All(c => !blackNumbers.Contains(c))).ToList();
+            forReport = forReport.Where(s => s.Price > minPrice && s.Price < maxPrice).ToList();
 
             using (var sw = new StreamWriter("Result_report.txt"))
             {
@@ -91,6 +110,9 @@ namespace RentFinder.Roma
                                     resLink.PhoneNumbers.AddRange(GetPhoneNumbers(resLink.TempId, brContextFactory.GetNew()));
                                     var docAd = priceTask.Result;
                                     var priceString = docAd.QuerySelector(".pricelabel.tcenter").Children[0].InnerHtml;
+                                    var isPrivateString = docAd.QuerySelector("#offerdescription > div.clr.descriptioncontent.marginbott20 > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr > td > strong > a").InnerHtml;
+                                    isPrivateString = Regex.Replace(isPrivateString, "[\t\n]", "");
+                                    resLink.IsPrivate = !isPrivateString.Equals("Бизнес");
                                     string value = Regex.Replace(priceString, "[А-Яа-яA-Za-z$ .]", "");
                                     resLink.Price = double.Parse(value);
                                     string rooms = docAd.QuerySelector("#offerdescription > div.clr.descriptioncontent.marginbott20 > table > tbody > tr:nth-child(2) > td.col > table > tbody > tr > td > strong").InnerHtml;

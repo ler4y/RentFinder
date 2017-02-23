@@ -14,6 +14,7 @@ namespace RentFinder.Model
         public string Link { get; set; }
         public List<string> PhoneNumbers { get; private set; }
         public double Price { get; set; }
+        public bool IsPrivate { get; set; }
         public int Rooms { get; set; }
     }
 }

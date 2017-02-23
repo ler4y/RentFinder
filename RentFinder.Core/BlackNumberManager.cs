@@ -64,7 +64,7 @@ namespace RentFinder.Core
         {
             lock (_locker)
             {
-                return PhoneAdDictionary.AsParallel().Where(s => s.Value.Count <= maximumAdsForNumber).Select(s => s.Key).ToList();
+                return PhoneAdDictionary.AsParallel().Where(s => s.Value.Count > maximumAdsForNumber).Select(s => s.Key).ToList();
             }
         }
 
