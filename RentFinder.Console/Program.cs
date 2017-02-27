@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using RentFinder.Model;
 using RentFinder.Core;
 using AngleSharp.Parser.Html;
+using RentFinder.Base;
 using RentFinder.Service.Core.TaskManagement;
 using RentFinder.Service.Core.TaskManagement.Commands;
 using RentFinder.Service.Core.Tasks;

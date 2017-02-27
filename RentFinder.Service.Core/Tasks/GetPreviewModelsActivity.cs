@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using AngleSharp.Parser.Html;
+using RentFinder.Base;
 using RentFinder.Model;
-using RentFinder.Core;
 
 namespace RentFinder.Service.Core.Tasks
 {

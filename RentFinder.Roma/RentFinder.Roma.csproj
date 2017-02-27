@@ -66,9 +66,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RentFinder.Core\RentFinder.Core.csproj">
-      <Project>{11A29F59-7D8C-45B5-9591-E5733D622DAE}</Project>
-      <Name>RentFinder.Core</Name>
+    <ProjectReference Include="..\RentFinder.Base\RentFinder.Base.csproj">
+      <Project>{CABF4BEB-318D-4D3C-A2AA-02BF9402029C}</Project>
+      <Name>RentFinder.Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\RentFinder.Model\RentFinder.Model.csproj">
       <Project>{a1664e45-3760-437a-898a-62422afe30e9}</Project>

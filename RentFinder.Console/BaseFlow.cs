@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using RentFinder.Core;
+using RentFinder.Base;
 using RentFinder.Service.Core.TaskManagement;
 using RentFinder.Service.Core.TaskManagement.Commands;
 
