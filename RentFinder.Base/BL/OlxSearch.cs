@@ -30,8 +30,7 @@ namespace RentFinder.Base.BL
             var forReport = res.Where(s => s.IsPrivate).ToList();
             forReport = forReport.Where(s => s.PhoneNumbers.All(c => !blackNumbers.Contains(c))).ToList();
             forReport = forReport.Where(s => s.Price > minPrice && s.Price < maxPrice).ToList();
-            forReport.Sort();
-            return forReport;
+            return forReport.OrderBy(s=>s.Link).ToList();
         }
 
         private List<AdModel> GetLinks(string link)
