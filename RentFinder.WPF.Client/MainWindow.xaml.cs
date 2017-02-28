@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using RentFinder.Base.BL;
 
 namespace RentFinder.WPF.Client
 {
@@ -10,20 +13,34 @@ namespace RentFinder.WPF.Client
     /// </summary>
     public partial class MainWindow : Window
     {
+        
         public MainWindow()
         {
             InitializeComponent();
-            listbox1.SelectionChanged += (sender, args) => browser.Load(listbox1.SelectedValue.ToString());
+            MainFrame.Navigate(new StartPage(MainFrame));
         }
 
-        private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void ForRoma()
         {
-            listbox1.Items.Clear();
-            var links = (sender as TextBox).Text.Split(new [] { "\n" }, StringSplitOptions.None).ToList();
-            foreach (var link in links)
+            var link = ConfigurationManager.AppSettings["LinkToProcess"];
+            var maxAdsForNumber = uint.Parse(ConfigurationManager.AppSettings["MaxAdsForNumber"]);
+            var minPrice = double.Parse(ConfigurationManager.AppSettings["MinPrice"]);
+            var maxPrice = double.Parse(ConfigurationManager.AppSettings["MaxPrice"]);
+
+            var search = new OlxSearch(App.Logger);
+            var forReport = search.GetReport(link, maxAdsForNumber, minPrice, maxPrice);
+
+            using (var sw = new StreamWriter("Result_report.txt"))
             {
-                listbox1.Items.Add(link);
+                sw.WriteLine("Ads count: {0}", forReport.Count);
+                foreach (var ad in forReport)
+                {
+                    sw.WriteLine(ad.Link);
+                }
             }
+
+            App.Logger.Info("Done!");
         }
+       
     }
 }

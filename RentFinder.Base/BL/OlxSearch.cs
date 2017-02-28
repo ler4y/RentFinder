@@ -88,10 +88,10 @@ namespace RentFinder.Base.BL
                             {
                                 Logger.Error(ex.ToString());
                             }
+                            Thread.Sleep(1000);
                         }
                         break;
                     }
-
                 }
                 Console.WriteLine();
             }
