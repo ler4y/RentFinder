@@ -27,7 +27,7 @@
                         />
 
         <ListBox x:Name="listbox1" Grid.RowSpan="2"></ListBox>
-        <Button Grid.Row="2">Delete</Button>
+        <Button x:Name="deleteAdBtn" Grid.Row="2" Click="deleteAdBtn_Click">Delete</Button>
         <!--<WebBrowser x:Name="browser" Grid.Column="1" Grid.RowSpan="2"></WebBrowser>-->
         <wpf:ChromiumWebBrowser x:Name="browser" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" />
     </Grid>

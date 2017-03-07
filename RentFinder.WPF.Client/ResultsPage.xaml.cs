@@ -11,17 +11,22 @@ namespace RentFinder.WPF.Client
     /// </summary>
     public partial class ResultsPage : NavigationPage
     {
+        private List<AdModel> _results;
         public ResultsPage(Frame parentFrame):base(parentFrame)
         {
             InitializeComponent();
-            listbox1.SelectionChanged += (sender, args) => browser.Load(listbox1.SelectedValue.ToString());
+            listbox1.SelectionChanged += (sender, args) =>
+            {
+                if (listbox1.SelectedValue != null) browser.Load(listbox1.SelectedValue.ToString());
+            };
         }
 
         public ResultsPage(Frame parentFrame, List<AdModel> data) : this(parentFrame)
         {
             listbox1.DisplayMemberPath = "TempId";
             listbox1.SelectedValuePath = "Link";
-            listbox1.ItemsSource = data;
+            _results = data;
+            listbox1.ItemsSource = _results;
         }
         private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -30,6 +35,15 @@ namespace RentFinder.WPF.Client
             foreach (var link in links)
             {
                 listbox1.Items.Add(link);
+            }
+        }
+
+        private void deleteAdBtn_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (listbox1.SelectedItem != null)
+            {
+                _results.Remove((AdModel)listbox1.SelectedItem);
+                Dispatcher.Invoke(() => listbox1.Items.Refresh());
             }
         }
     }
