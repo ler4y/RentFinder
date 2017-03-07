@@ -11,8 +11,20 @@ using RentFinder.Model;
 
 namespace RentFinder.Base.BL
 {
+
+    public class ProgressChangedEventArgs
+    {
+        public int ProgressInPercents { get; set; }
+        public int StartPage { get; set; }
+        public int StopPage { get; set; }
+        public int CurrentPage { get; set; }
+        public int StartAd { get; set; }
+        public int StopAd { get; set; }
+        public int CurrentAd { get; set; }
+    }
     public class OlxSearch
     {
+        public event EventHandler<ProgressChangedEventArgs> ProgressChanged; 
         protected ILog Logger { get; private set; }
         public OlxSearch(ILog logger)
         {
@@ -62,20 +74,28 @@ namespace RentFinder.Base.BL
                             try
                             {
                                 Logger.Debug(String.Format("\tProcessing link: {0}", k));
-                                var resLink = new AdModel { Link = rawLink.Attributes["href"].Value };
+                                var resLink = new AdModel {Link = rawLink.Attributes["href"].Value};
                                 resLink.TempId = Regex.Match(resLink.Link, regexPattern).Groups[1].Value;
                                 if (!processedIds.Contains(resLink.TempId))
                                 {
-                                    var priceTask = brContextFactory.GetNew().OpenAsync(rawLink.Attributes["href"].Value);
-                                    resLink.PhoneNumbers.AddRange(GetPhoneNumbers(resLink.TempId, brContextFactory.GetNew()));
+                                    var priceTask = brContextFactory.GetNew()
+                                        .OpenAsync(rawLink.Attributes["href"].Value);
+                                    resLink.PhoneNumbers.AddRange(GetPhoneNumbers(resLink.TempId,
+                                        brContextFactory.GetNew()));
                                     var docAd = priceTask.Result;
                                     var priceString = docAd.QuerySelector(".pricelabel.tcenter").Children[0].InnerHtml;
-                                    var isPrivateString = docAd.QuerySelector("#offerdescription > div.clr.descriptioncontent.marginbott20 > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr > td > strong > a").InnerHtml;
+                                    var isPrivateString =
+                                        docAd.QuerySelector(
+                                            "#offerdescription > div.clr.descriptioncontent.marginbott20 > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr > td > strong > a")
+                                            .InnerHtml;
                                     isPrivateString = Regex.Replace(isPrivateString, "[\t\n]", "");
                                     resLink.IsPrivate = !isPrivateString.Equals("Бизнес");
                                     string value = Regex.Replace(priceString, "[А-Яа-яA-Za-z$ .]", "");
                                     resLink.Price = Double.Parse(value);
-                                    string rooms = docAd.QuerySelector("#offerdescription > div.clr.descriptioncontent.marginbott20 > table > tbody > tr:nth-child(2) > td.col > table > tbody > tr > td > strong").InnerHtml;
+                                    string rooms =
+                                        docAd.QuerySelector(
+                                            "#offerdescription > div.clr.descriptioncontent.marginbott20 > table > tbody > tr:nth-child(2) > td.col > table > tbody > tr > td > strong")
+                                            .InnerHtml;
                                     resLink.Rooms = Int32.Parse(Regex.Replace(rooms, "[А-Яа-яA-Za-z .]", ""));
                                     res.Add(resLink);
                                     processedIds.Add(resLink.TempId);
@@ -87,6 +107,21 @@ namespace RentFinder.Base.BL
                             catch (Exception ex)
                             {
                                 Logger.Error(ex.ToString());
+                            }
+                            finally
+                            {
+                                if (ProgressChanged != null)
+                                {
+                                    ProgressChanged(this, new ProgressChangedEventArgs()
+                                    {
+                                        CurrentAd = k,
+                                        StartAd = 1,
+                                        StopAd = rawLinks.Count(),
+                                        StartPage = 1,
+                                        StopPage = pagesCount,
+                                        CurrentPage = i
+                                    });
+                                }
                             }
                             Thread.Sleep(1000);
                         }

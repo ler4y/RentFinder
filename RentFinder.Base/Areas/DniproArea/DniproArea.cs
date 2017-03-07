@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using RentFinder.Core.Areas;
 
 namespace RentFinder.Base.Areas.DniproArea
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RentFinder.Service.Core.Tasks
+﻿namespace RentFinder.Service.Core.Tasks
 {
 
     public interface IActivity

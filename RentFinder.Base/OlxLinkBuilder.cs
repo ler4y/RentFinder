@@ -1,5 +1,4 @@
 ﻿using RentFinder.Base.Areas;
-using RentFinder.Core.Areas;
 using RentFinder.Core.RealtyTypes;
 
 namespace RentFinder.Base
