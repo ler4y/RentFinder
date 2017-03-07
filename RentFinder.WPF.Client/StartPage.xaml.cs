@@ -1,5 +1,9 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Windows;
 using System.Windows.Controls;
+using Newtonsoft.Json;
+using RentFinder.Model;
 
 namespace RentFinder.WPF.Client
 {
@@ -15,7 +19,10 @@ namespace RentFinder.WPF.Client
 
         private void openLastBtn_Click(object sender, RoutedEventArgs e)
         {
-           ParentFrame.Navigate(new ResultsPage(ParentFrame));
+            using (var sr = new StreamReader("Result_report.txt"))
+            {
+                ParentFrame.Navigate(new ResultsPage(ParentFrame, JsonConvert.DeserializeObject<List<AdModel>>(sr.ReadToEnd())));
+            }
         }
 
         private void newSearchBtn_Click(object sender, RoutedEventArgs e)

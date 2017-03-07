@@ -5,6 +5,7 @@ using RentFinder.Base.BL;
 using System.Threading.Tasks;
 using RentFinder.Model;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace RentFinder.WPF.Client
 {
@@ -31,12 +32,8 @@ namespace RentFinder.WPF.Client
             var forReport = search.GetReport(link, maxAdsForNumber, minPrice, maxPrice);
 
             using (var sw = new StreamWriter("Result_report.txt"))
-            {
-                sw.WriteLine("Ads count: {0}", forReport.Count);
-                foreach (var ad in forReport)
-                {
-                    sw.WriteLine(ad.Link);
-                }
+            {  
+                sw.Write(JsonConvert.SerializeObject(forReport));
             }
 
             App.Logger.Info("Done!");
