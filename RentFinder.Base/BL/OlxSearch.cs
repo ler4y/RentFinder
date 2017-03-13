@@ -178,7 +178,7 @@ namespace RentFinder.Base.BL
             var pager = doc.QuerySelector("#body-container > div:nth-child(3) > div > div.pager.rel.clr");
             var spans = pager.QuerySelectorAll(".item.fleft");
 #if DEBUG
-            return 1;
+            return 5;
 #else
             return spans.Select(s=> 
                 {
