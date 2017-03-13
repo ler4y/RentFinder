@@ -25,7 +25,7 @@ namespace RentFinder.WPF.Client
 
         public ResultsPage(Frame parentFrame, List<AdModel> data) : this(parentFrame)
         {
-            listbox1.DisplayMemberPath = "TempId";
+            listbox1.DisplayMemberPath = "Title";
             listbox1.SelectedValuePath = "Link";
             _results = data;
             listbox1.ItemsSource = _results;

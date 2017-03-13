@@ -84,6 +84,8 @@ namespace RentFinder.Base.BL
                                         brContextFactory.GetNew()));
                                     var docAd = priceTask.Result;
                                     var priceString = docAd.QuerySelector(".pricelabel.tcenter").Children[0].InnerHtml;
+                                    var address = docAd.QuerySelector("#offerdescription > div.offer-titlebox > div.offer-titlebox__details > a > strong").InnerHtml;
+                                    resLink.Address = address;
                                     var isPrivateString =
                                         docAd.QuerySelector(
                                             "#offerdescription > div.clr.descriptioncontent.marginbott20 > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr > td > strong > a")
@@ -178,7 +180,7 @@ namespace RentFinder.Base.BL
             var pager = doc.QuerySelector("#body-container > div:nth-child(3) > div > div.pager.rel.clr");
             var spans = pager.QuerySelectorAll(".item.fleft");
 #if DEBUG
-            return 5;
+            return 1;
 #else
             return spans.Select(s=> 
                 {
