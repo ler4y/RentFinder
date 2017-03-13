@@ -1,8 +1,10 @@
 ﻿using RentFinder.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Controls;
+using Newtonsoft.Json;
 
 namespace RentFinder.WPF.Client
 {
@@ -44,6 +46,10 @@ namespace RentFinder.WPF.Client
             {
                 _results.Remove((AdModel)listbox1.SelectedItem);
                 Dispatcher.Invoke(() => listbox1.Items.Refresh());
+                using (var sw = new StreamWriter("Result_report.txt"))
+                {
+                    sw.Write(JsonConvert.SerializeObject(listbox1.ItemsSource));
+                }
             }
         }
     }
