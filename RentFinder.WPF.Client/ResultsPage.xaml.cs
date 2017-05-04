@@ -25,11 +25,24 @@ namespace RentFinder.WPF.Client
 
         public ResultsPage(Frame parentFrame, List<AdModel> data) : this(parentFrame)
         {
+            var variants = new List<string> {"Все"};
+            variants.AddRange(data.Select(s => s.Area).Distinct());
+            areasCmb.ItemsSource = variants;
+            areasCmb.SelectionChanged += AreasCmb_SelectionChanged;
+            _results = data;
+            areasCmb.SelectedItem = "Все";
             listbox1.DisplayMemberPath = "Title";
             listbox1.SelectedValuePath = "Link";
-            _results = data;
-            listbox1.ItemsSource = _results;
         }
+
+        private void AreasCmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            listbox1.ItemsSource = (string)areasCmb.SelectedValue == "Все" 
+                ? _results 
+                : _results.Where(s => s.Area == (string)areasCmb.SelectedValue);
+            Dispatcher.Invoke(() => listbox1.Items.Refresh());
+        }
+
         private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             listbox1.Items.Clear();

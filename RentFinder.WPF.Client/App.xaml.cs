@@ -18,12 +18,13 @@ namespace RentFinder.WPF.Client
             log4net.Config.XmlConfigurator.Configure();
             var client = new NtpClient();
             var result =  client.RequestTimeAsync().Result;
-            var timetoDie = new DateTime(2017, 4, 1, 1,1,1);
+            var timetoDie = new DateTime(2017, 6, 15, 0,0,0);
             if (result < timetoDie)
             {
                 Task.Run(() =>
                 {
-                    Thread.Sleep(timetoDie - result);
+                    var timeToSleep = (timetoDie - result).TotalMilliseconds;
+                    Thread.Sleep(timeToSleep > int.MaxValue ? Int32.MaxValue : (int)timeToSleep);
                     Current.Shutdown();
                 });
             }else Current.Shutdown();
